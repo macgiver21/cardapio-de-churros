@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrocinha de Churros da Ester</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5e6d2;
+            margin: 0;
+            padding: 20px;
+            color: #5c3a21;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #d35400;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-style: italic;
+            color: #7f5539;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .products {
+            flex: 2;
+            min-width: 300px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .cart {
+            flex: 1;
+            min-width: 300px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        h2 {
+            color: #d35400;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-info {
+            flex: 2;
+        }
+        
+        .product-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        
+        .product-description {
+            font-size: 0.9em;
+            color: #7f5539;
+            margin-bottom: 5px;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: #d35400;
+        }
+        
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background-color: #e67e22;
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #d35400;
+        }
+        
+        .quantity {
+            width: 30px;
+            text-align: center;
+        }
+        
+        .add-to-cart {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #219653;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-info {
+            flex: 2;
+        }
+        
+        .cart-item-name {
+            font-weight: bold;
+        }
+        
+        .cart-item-price {
+            color: #d35400;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-item {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: right;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid #e67e22;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #d35400;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #e67e22;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #7f5539;
+            padding: 20px;
+        }
+        
+        .options {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .option-item {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option-checkbox {
+            margin-right: 8px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 1000;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+        
+        .whatsapp-icon {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Carrocinha de Churros da Ester</h1>
+        <p>Os melhores churros da cidade!</p>
+    </div>
+    
+    <div class="container">
+        <div class="products">
+            <h2>Nossos Churros</h2>
+            
+            <div class="product-item">
+                <div class="product-info">
+                    <div class="product-name">Churros Tradicional</div>
+                    <div class="product-description">Churros crocante por fora e macio por dentro, polvilhado com açúcar e canela</div>
+                    <div class="product-price">R$ 5,00</div>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="checkbox" class="option-checkbox" id="trad-doce1" data-product="tradicional" data-option="doce-de-leite" data-price="2">
+                            <label for="trad-doce1">Recheio de doce de leite (+R$ 2,00)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" class="option-checkbox" id="trad-chocolate1" data-product="tradicional" data-option="chocolate" data-price="2">
+                            <label for="trad-chocolate1">Recheio de chocolate (+R$ 2,00)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus" data-product="tradicional">-</button>
+                        <input type="text" class="quantity" value="1" data-product="tradicional" readonly>
+                        <button class="quantity-btn plus" data-product="tradicional">+</button>
+                    </div>
+                    <button class="add-to-cart" data-product="tradicional" data-price="5">Adicionar</button>
+                </div>
+            </div>
+            
+            <div class="product-item">
+                <div class="product-info">
+                    <div class="product-name">Churros Recheado</div>
+                    <div class="product-description">Churros recheado com sua escolha de doce de leite ou chocolate</div>
+                    <div class="product-price">R$ 7,00</div>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="radio" name="recheio" class="option-checkbox" id="rech-doce" data-product="recheado" data-option="doce-de-leite" checked>
+                            <label for="rech-doce">Doce de leite</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="recheio" class="option-checkbox" id="rech-chocolate" data-product="recheado" data-option="chocolate">
+                            <label for="rech-chocolate">Chocolate</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus" data-product="recheado">-</button>
+                        <input type="text" class="quantity" value="1" data-product="recheado" readonly>
+                        <button class="quantity-btn plus" data-product="recheado">+</button>
+                    </div>
+                    <button class="add-to-cart" data-product="recheado" data-price="7">Adicionar</button>
+                </div>
+            </div>
+            
+            <div class="product-item">
+                <div class="product-info">
+                    <div class="product-name">Churros Especial</div>
+                    <div class="product-description">Churros recheado com doce de leite e coberto com chocolate</div>
+                    <div class="product-price">R$ 9,00</div>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="checkbox" class="option-checkbox" id="especial-granulado" data-product="especial" data-option="granulado" data-price="1">
+                            <label for="especial-granulado">Granulado colorido (+R$ 1,00)</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" class="option-checkbox" id="especial-coco" data-product="especial" data-option="coco" data-price="1">
+                            <label for="especial-coco">Coco ralado (+R$ 1,00)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus" data-product="especial">-</button>
+                        <input type="text" class="quantity" value="1" data-product="especial" readonly>
+                        <button class="quantity-btn plus" data-product="especial">+</button>
+                    </div>
+                    <button class="add-to-cart" data-product="especial" data-price="9">Adicionar</button>
+                </div>
+            </div>
+            
+            <div class="product-item">
+                <div class="product-info">
+                    <div class="product-name">Mini Churros</div>
+                    <div class="product-description">Pequenos churros perfeitos para lanches (pacote com 5 unidades)</div>
+                    <div class="product-price">R$ 8,00</div>
+                    <div class="options">
+                        <div class="option-item">
+                            <input type="checkbox" class="option-checkbox" id="mini-canela" data-product="mini" data-option="canela-extra" data-price="0.5">
+                            <label for="mini-canela">Canela extra (+R$ 0,50)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus" data-product="mini">-</button>
+                        <input type="text" class="quantity" value="1" data-product="mini" readonly>
+                        <button class="quantity-btn plus" data-product="mini">+</button>
+                    </div>
+                    <button class="add-to-cart" data-product="mini" data-price="8">Adicionar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cart">
+            <h2>Seu Carrinho</h2>
+            <div id="cart-items">
+                <div class="empty-cart">Seu carrinho está vazio</div>
+            </div>
+            <div class="cart-total">
+                Total: R$ <span id="cart-total">0,00</span>
+            </div>
+            <button class="checkout-btn" id="checkout-btn">Finalizar Compra</button>
+            <button class="whatsapp-btn" id="whatsapp-btn" style="display: none;">
+                <span class="whatsapp-icon">📱</span> Enviar pedido por WhatsApp
+            </button>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">Item adicionado ao carrinho!</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = [];
+            let cartTotal = 0;
+            
+            // Elementos do DOM
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            const notification = document.getElementById('notification');
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            
+            // Mapeamento de produtos
+            const products = {
+                'tradicional': {
+                    name: 'Churros Tradicional',
+                    basePrice: 5.00
+                },
+                'recheado': {
+                    name: 'Churros Recheado',
+                    basePrice: 7.00
+                },
+                'especial': {
+                    name: 'Churros Especial',
+                    basePrice: 9.00
+                },
+                'mini': {
+                    name: 'Mini Churros',
+                    basePrice: 8.00
+                }
+            };
+            
+            // Função para formatar preço
+            function formatPrice(price) {
+                return price.toFixed(2).replace('.', ',');
+            }
+            
+            // Função para mostrar notificação
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.style.opacity = 1;
+                setTimeout(() => {
+                    notification.style.opacity = 0;
+                }, 3000);
+            }
+            
+            // Função para atualizar o carrinho
+            function updateCart() {
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<div class="empty-cart">Seu carrinho está vazio</div>';
+                    cartTotalElement.textContent = '0,00';
+                    whatsappBtn.style.display = 'none';
+                    return;
+                }
+                
+                cartItemsContainer.innerHTML = '';
+                let newTotal = 0;
+                
+                cart.forEach((item, index) => {
+                    newTotal += item.totalPrice;
+                    
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.className = 'cart-item';
+                    cartItemElement.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name} (${item.quantity}x)</div>
+                            ${item.options.length > 0 ? 
+                                `<div class="cart-item-options">${item.options.join(', ')}</div>` : 
+                                ''}
+                            <div class="cart-item-price">R$ ${formatPrice(item.totalPrice)}</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="remove-item" data-index="${index}">×</button>
+                        </div>
+                    `;
+                    
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
+                
+                cartTotal = newTotal;
+                cartTotalElement.textContent = formatPrice(cartTotal);
+                whatsappBtn.style.display = 'flex';
+                
+                // Adiciona eventos aos botões de remover
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        cart.splice(index, 1);
+                        updateCart();
+                        showNotification('Item removido do carrinho');
+                    });
+                });
+            }
+            
+            // Eventos de quantidade
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    const quantityInput = document.querySelector(`.quantity[data-product="${product}"]`);
+                    let quantity = parseInt(quantityInput.value);
+                    
+                    if (this.classList.contains('plus')) {
+                        quantity++;
+                    } else if (this.classList.contains('minus') && quantity > 1) {
+                        quantity--;
+                    }
+                    
+                    quantityInput.value = quantity;
+                });
+            });
+            
+            // Eventos de adicionar ao carrinho
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    const basePrice = parseFloat(this.getAttribute('data-price'));
+                    const quantity = parseInt(document.querySelector(`.quantity[data-product="${product}"]`).value);
+                    
+                    // Obter opções selecionadas
+                    const options = [];
+                    let optionsPrice = 0;
+                    
+                    document.querySelectorAll(`.option-checkbox[data-product="${product}"]:checked`).forEach(option => {
+                        const optionName = option.getAttribute('data-option');
+                        const optionPrice = parseFloat(option.getAttribute('data-price') || 0);
+                        options.push(optionName);
+                        optionsPrice += optionPrice;
+                    });
+                    
+                    // Verificar se é um produto com radio buttons (como recheio)
+                    const radioOptions = document.querySelectorAll(`.option-checkbox[data-product="${product}"][type="radio"]:checked`);
+                    if (radioOptions.length > 0) {
+                        radioOptions.forEach(option => {
+                            const optionName = option.getAttribute('data-option');
+                            options.push(optionName);
+                        });
+                    }
+                    
+                    const totalPrice = (basePrice + optionsPrice) * quantity;
+                    
+                    // Adicionar ao carrinho
+                    cart.push({
+                        name: products[product].name,
+                        product: product,
+                        quantity: quantity,
+                        options: options,
+                        basePrice: basePrice,
+                        optionsPrice: optionsPrice,
+                        totalPrice: totalPrice
+                    });
+                    
+                    updateCart();
+                    showNotification('Item adicionado ao carrinho!');
+                    
+                    // Resetar quantidade
+                    document.querySelector(`.quantity[data-product="${product}"]`).value = 1;
+                });
+            });
+            
+            // Evento de finalizar compra
+            document.getElementById('checkout-btn').addEventListener('click', function() {
+                if (cart.length === 0) {
+                    showNotification('Adicione itens ao carrinho primeiro!');
+                    return;
+                }
+                
+                // Mostrar confirmação
+                const confirmMessage = `Confirmar pedido no valor de R$ ${formatPrice(cartTotal)}?`;
+                if (confirm(confirmMessage)) {
+                    sendToWhatsApp();
+                }
+            });
+            
+            // Evento do botão do WhatsApp
+            whatsappBtn.addEventListener('click', sendToWhatsApp);
+            
+            // Função para enviar pedido para o WhatsApp
+            function sendToWhatsApp() {
+                if (cart.length === 0) return;
+                
+                // Número de telefone da Carrocinha de Churros da Ester
+                const phoneNumber = "5521996821222"; // Substitua pelo número real
+                
+                // Montar mensagem do pedido
+                let message = "Olá, Carrocinha de Churros da Ester! Gostaria de fazer o seguinte pedido:\n\n";
+                
+                cart.forEach(item => {
+                    message += `- ${item.quantity}x ${item.name}`;
+                    if (item.options.length > 0) {
+                        message += ` (${item.options.join(', ')})`;
+                    }
+                    message += ` - R$ ${formatPrice(item.totalPrice)}\n`;
+                });
+                
+                message += `\n*Total: R$ ${formatPrice(cartTotal)}*`;
+                message += "\n\nPor favor, confirmem o pedido. Obrigado!";
+                
+                // Codificar a mensagem para URL
+                const encodedMessage = encodeURIComponent(message);
+                
+                // Criar link do WhatsApp
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                
+                // Abrir em nova aba
+                window.open(whatsappUrl, '_blank');
+                
+                // Limpar carrinho após envio
+                cart.length = 0;
+                updateCart();
+                showNotification('Pedido enviado para o WhatsApp!');
+            }
+        });
+    </script>
+</body>
+</html>
